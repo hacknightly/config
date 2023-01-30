@@ -17,7 +17,7 @@
 (find-file "~/Dropbox/darrellbanks.com/org/tasks/inbox.org")        ; Open to inbox file
 
 
-;; package managemet
+;; package management
 (require 'package)
 (setq package-enable-at-startup nil)
 (package-initialize)
@@ -231,6 +231,10 @@
   :config
   (global-evil-mc-mode 1))
 
+;; Magit
+(use-package magit
+  :ensure t)
+
 ;; Key Bindings
 (use-package which-key :ensure t
   :init (which-key-mode))
@@ -345,8 +349,12 @@
    "wk"  '(windmove-up :which-key "Move to Window Above")
 
    ;; LSP
-   "gg" '(lsp-find-definition :which-key "Find Definition")
+   "D" '(lsp-find-definition :which-key "Find Definition")
 
+   ;; Magit
+   "g" '(:ignore t :which-key "Magit")
+   "gd" '(magit-diff :which-key "Diff")
+   
    ;; Emacs
    "q" '(:ignore t :which-key "Quit")
    "qr" '(restart-emacs :which-key "Restart Emacs")
