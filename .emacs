@@ -137,10 +137,10 @@
 (setq indent-line-function 'insert-space)
 
 ;; - theme
-(use-package solo-jazz-theme
+(use-package exotica-theme 
   :ensure t
   :config
-  (load-theme 'solo-jazz t))
+  (load-theme 'exotica t))
 
 ;; use-package
 (unless (package-installed-p 'use-package) ; unless it is already installed
@@ -368,7 +368,8 @@
  '(custom-safe-themes
    '("1d89fcf0105dd8778e007239c481643cc5a695f2a029c9f30bd62c9d5df6418d" default))
  '(package-selected-packages
-   '(org-roam-ui all-the-icons-ivy web-mode doom-modeline all-the-icons evil avy)))
+   '(org-roam-ui all-the-icons-ivy web-mode doom-modeline all-the-icons evil avy))
+ '(safe-local-variable-values '((org-hugo-base-dir . "./org"))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
