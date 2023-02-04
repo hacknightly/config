@@ -93,6 +93,7 @@
 
 (use-package org-roam-ui
     :after org-roam
+    :ensure t
     :config
     (setq org-roam-ui-sync-theme t
           org-roam-ui-follow t
