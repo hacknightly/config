@@ -117,7 +117,7 @@
     (add-hook 'org-mode-hook (org-superstar-mode 1)))
 
 ;; - font
-(set-face-attribute 'default nil :font "Source Code Pro" :height 180)
+(set-face-attribute 'default nil :font "Mono Lisa" :height 180)
 ;; - icons
 (use-package all-the-icons :ensure t)
 ;; - company
