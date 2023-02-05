@@ -40,8 +40,40 @@
   (find-file user-init-file))
 
 ;; tree sitter
+(use-package treesit
+  :commands (treesit-install-language-grammar nf/treesit-install-all-languages)
+  :init
+  (setq treesit-language-source-alist
+   '((bash . ("https://github.com/tree-sitter/tree-sitter-bash"))
+     (c . ("https://github.com/tree-sitter/tree-sitter-c"))
+     (cpp . ("https://github.com/tree-sitter/tree-sitter-cpp"))
+     (css . ("https://github.com/tree-sitter/tree-sitter-css"))
+     (go . ("https://github.com/tree-sitter/tree-sitter-go"))
+     (html . ("https://github.com/tree-sitter/tree-sitter-html"))
+     (javascript . ("https://github.com/tree-sitter/tree-sitter-javascript"))
+     (json . ("https://github.com/tree-sitter/tree-sitter-json"))
+     (lua . ("https://github.com/Azganoth/tree-sitter-lua"))
+     (make . ("https://github.com/alemuller/tree-sitter-make"))
+     (ocaml . ("https://github.com/tree-sitter/tree-sitter-ocaml" "master" "ocaml/src"))
+     (python . ("https://github.com/tree-sitter/tree-sitter-python"))
+     (php . ("https://github.com/tree-sitter/tree-sitter-php"))
+     (typescript . ("https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src"))
+     (ruby . ("https://github.com/tree-sitter/tree-sitter-ruby"))
+     (rust . ("https://github.com/tree-sitter/tree-sitter-rust"))
+     (sql . ("https://github.com/m-novikov/tree-sitter-sql"))
+     (toml . ("https://github.com/tree-sitter/tree-sitter-toml"))
+     (zig . ("https://github.com/GrayJack/tree-sitter-zig"))))
+  :config
+  (defun nf/treesit-install-all-languages ()
+    "Install all languages specified by `treesit-language-source-alist'."
+    (interactive)
+    (let ((languages (mapcar 'car treesit-language-source-alist)))
+      (dolist (lang languages)
+	      (treesit-install-language-grammar lang)
+	      (message "`%s' parser was installed." lang)
+	      (sit-for 0.75)))))
+
 (require 'treesit)
-(setq treesit-extra-load-path '("~/MyLib/tree-sitter-module/dist"))
 
 ;; org mode
 (use-package org
@@ -118,7 +150,7 @@
     (add-hook 'org-mode-hook (org-superstar-mode 1)))
 
 ;; - font
-(set-face-attribute 'default nil :font "Mono Lisa" :height 180)
+(set-face-attribute 'default nil :font "MonoLisa" :height 180)
 ;; - icons
 (use-package all-the-icons :ensure t)
 ;; - company
@@ -154,6 +186,10 @@
     (projectile-global-mode))
 
 ;; Languages
+;; - Typescript
+(add-to-list 'auto-mode-alist '("\\.tsx?\\'" . typescript-ts-mode))
+(add-hook 'typescript-ts-mode-hook 'eglot-ensure)
+
 ;; - brackets
 (electric-pair-mode 1)
 
@@ -162,26 +198,14 @@
     :mode (("\\.svelte$" .  web-mode)
          ("\\.html$" .  web-mode)))
 
-
 ;; - prettier
 (use-package prettier-js :ensure t
   :init
   (add-hook 'typescript-ts-mode-hook 'prettier-js-mode)
   (add-hook 'web-mode-hook 'prettier-js-mode))
 
-;; lsp
-(use-package lsp-mode :ensure t
-  :hook ((typescript-ts-mode . lsp))
-  :hook ((web-mode . lsp))
-  :commands lsp)
-(use-package lsp-ui :ensure t)
-(use-package lsp-ivy :ensure t)
-(use-package lsp-treemacs :ensure t)
-(use-package flycheck :ensure t)
-
 ;; treemacs
 (use-package treemacs :ensure t)
-
 (use-package treemacs-evil :ensure t)
 (use-package treemacs-projectile :ensure t)
 
@@ -283,8 +307,14 @@
    "A"   'org-archive-subtree
    "il"  'org-insert-link
    "RET" 'org-meta-return
-   "TAB" 'org-demote-subtree
-)
+   "TAB" 'org-demote-subtree)
+
+  ;; xref keys
+  (general-define-key
+   :states '(normal visual)
+   :keymaps 'xref--xref-buffer-mode-map
+   "," 'xref-goto-xref)
+
 
   ;; general keys
   (general-define-key
@@ -309,6 +339,11 @@
    "aoru" '(org-roam-ui-open :which-key "Open UI")
    "aos" '(org-edit-src-exit :which-key "Exit Src Edit")
 
+   ;; Eglot
+   "T" '(eglot-find-typeDefinition :which-key "Find Type Definition")
+   "I" '(eglot-find-implementation :which-key "Find Implementation")
+   "D"  '(eglot-find-declaration :which-key "Find Declaration")
+   
    ;; Buffers
    "b" '(:ignore t :which-key "Buffers")
    "bl" '(list-buffers :which-key "List Buffers")
@@ -349,17 +384,13 @@
    "wj" '(windmove-down :which-key "Move to Window Below")
    "wk"  '(windmove-up :which-key "Move to Window Above")
 
-   ;; LSP
-   "D" '(lsp-find-definition :which-key "Find Definition")
-
    ;; Magit
    "g" '(:ignore t :which-key "Magit")
    "gd" '(magit-diff :which-key "Diff")
    
    ;; Emacs
    "q" '(:ignore t :which-key "Quit")
-   "qr" '(restart-emacs :which-key "Restart Emacs")
-))
+   "qr" '(restart-emacs :which-key "Restart Emacs")))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.

@@ -1,1 +1,1 @@
-PATH="/usr/local/bin:/opt/homebrew/bin:$PATH"
+PATH="/usr/local/bin:/opt/homebrew/bin:~/.asdf/shims:$PATH"
