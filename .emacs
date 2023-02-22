@@ -170,10 +170,10 @@
 (setq indent-line-function 'insert-space)
 
 ;; - theme
-(use-package exotica-theme 
+(use-package color-theme-modern 
   :ensure t
   :config
-  (load-theme 'exotica t))
+  (load-theme 'billw t))
 
 ;; use-package
 (unless (package-installed-p 'use-package) ; unless it is already installed
